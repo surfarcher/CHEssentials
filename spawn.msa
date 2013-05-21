@@ -1,0 +1,10 @@
+# CHEssentials - the CommandHelper replacement for Essentials.
+#
+# Copyright (c) 2013 by the sk89q.com community
+
+
+#	setspawn		Sets the spawn location.	/<command> [group]
+#	spawn		Teleports you to spawn.	/<command> [player]
+
+
+# EOF

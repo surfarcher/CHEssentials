@@ -1,0 +1,35 @@
+# CHEssentials - the CommandHelper replacement for Essentials.
+#
+# Copyright (c) 2013 by the sk89q.com community
+
+
+#	back	return	Returns you to your last position from a prior teleport.	/<command>
+#	delhome	remhome,rmhome	Removes a home	/<command> <name>
+#																					/<command> <player nick>:<name>
+#	delwarp	remwarp, rmwarp	Removes a warp location by warp name.	/<command> <warp name>
+#	home	homes	Teleports you home.	/<command> [name]
+#																					/<command> <player nick>:[name]
+#	jump	j, jumpto	Teleports you to the spot you select.	/<command>
+#	sethome		Sets your home location.	/<command> [name]
+#																					/<command> <player nick>:<name>
+#	setwarp	createwarp	Defines a new warp location.	/<command> <warp name>
+#	top		Teleports you to the highest block at your current location.	/<command>
+#	tp	tele, tp2p, teleport	Teleport directly to a player.	/<command> <player to teleport TO>
+#																					/<command> <player1> <player2>
+#	tpa	call, tpask	Asks the player if you can teleport to them.	/<command> <player to teleport TO>
+#	tpaall		Requests all players online to teleport to you.	/<command> [player]
+#	tpaccept	tpyes	Accept a /tpa request.	/<command> [player]
+#	tpahere		Asks the specified player to accept transport to your location.	/<command> <player to teleport to YOUR SELF>
+#	tpall		Teleports all connected players.	/<command> [player]
+#	tpdeny	tpno	Deny a /tpa request.	/<command>
+#	tphere	s	Teleport player directly to you.	/<command> <player to teleport to YOUR SELF>
+#	tpo		Overrides players preferences and teleports you to the player.	/<command> <player to teleport TO>
+#																					/<command> <player1> <player2>
+#	tpohere		Overrides players preferences and teleports player to you.	/<command> <player to teleport to YOUR SELF>
+#	tppos		Teleports you directly to a location.	/<command> <x> <y> <z> [yaw] [pitch]
+#	tptoggle		Toggles players ability to teleport to you.	/<command> [player]
+#	warp	warps	Warps you to a pre-set location.	/<command> [warp name [player]]
+#	world		Allows you to teleport to different world.	/<command> <nether|normal|0;1;2;3; etc..>
+
+
+# EOF

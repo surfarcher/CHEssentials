@@ -1,0 +1,9 @@
+# CHEssentials - the CommandHelper replacement for Essentials.
+#
+# Copyright (c) 2013 by the sk89q.com community
+
+msg.color.dest=YELLOW
+msg.color.source=GREEN
+msg.color.error=RED
+
+# EOF

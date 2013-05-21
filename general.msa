@@ -1,0 +1,154 @@
+# CHEssentials - the CommandHelper replacement for Essentials.
+#
+# Copyright (c) 2013 by the sk89q.com community
+
+# afk		Sets your status as AFK.	/<command> [player]
+# book		Allows reopening and editing of sealed books.	/<command> [title|author [name]]
+# compass	direction	Displays your current bearing in the world.	/<command>
+# depth		Displays your current block depth in relation to sea-level.	/<command>
+
+
+# surfarcher, 15-May-2013, 0pt.
+/coords [$=''] = call_alias(/getpos $)
+
+
+# surfarcher, 15-May-2013, 4pt.
+essentials.getpos:/getpos [$player=''] = >>>
+	include('common.ms')
+	
+	@ploc=null
+	if($player != '' && player($player) != player()) {
+		if(has_permission('essentials.getpos.others')) {
+			@ploc=ploc($player)
+		} else {
+			_CHEc_emsg(player(), 'You don\' have permission to get other players\' locations')
+		}
+	} else {
+		@ploc=ploc()
+	}
+	
+	if(@ploc != null) {
+		_CHEc_smsg(player(), 'Player '.player($player).' is at X:'.@ploc[0].' Y:'.@ploc[1].' Z:'.@ploc[2].' World:'.@ploc[3])
+	}
+<<<
+
+
+# help		This displays the help commands for essentials.	/<command> [searchterm] [2;3;4;5; etc..]
+# helpop	amsg, ac	Requests help from online staff.	/<command> <message>
+# ignore		Ignore a player	/<command> <player>
+# info	ifo, news, about, inform	This allows you to see information about the server.	/<command> <page number/chapter>
+# itemdb	itemno, durability, dura	Displays the item information attached to an item.	/<command> [search term]
+# list	who, playerlist, online, plist	Lists the players online and how many slots are left.	/<command>
+# mail		Allows you to send & receive mail.	/<command> [read|clear|send [to] [message]|sendall [message]]
+# me	action, describe	Allows you to emote.	/<command> <emote message>
+# motd		Displays the motd (Message of the Day).	/<command>
+
+
+# msg	tell, m, t, whisper	This allows you to private message another player.	/<command> <player> <message>
+# LadyCailin, 30-Jul-2011, 4pt.
+# surfarcher, 17-May-2013, 0pt. Standard messaging, a little reformatting, player() resolution.
+essentials.msg:/msg = >>>
+	include('common.ms')
+	_CHEc_emsg(player(), 'Usage: /msg player message text')
+<<<
+essentials.msg:/msg $player [$] = >>>
+	include('common.ms')
+	
+	@p = player($player)
+	try(
+	  msg('['.color(gold).'Me'.color(white).'->'.pinfo(@p, 0). '] '.$)
+	  tmsg(@p, '['.color(gold).player().color(white).'->Me] '.$)
+	  store_value('last_message_'.pinfo(@p, 0), player()),
+	@e,
+	  _CHEc_emsg(player(), 'That player is not online')
+	)
+<<<
+
+
+# near	nearby	Lists the players who are nearby	/<command> [radius]
+#					/<command> <playername> [radius]
+# nick		Change your display name.	/<command> <player> <nick|off>
+
+
+# surfarcher, 15-May-2013, 0pt.
+/online [$=''] = call_alias(/who $)
+
+
+# surfarcher, 15-May-2013, 0pt.
+/playerlist [$=''] = call_alias(/who $)
+
+
+# surfarcher, 15-May-2013, 0pt.
+/plist [$=''] = call_alias(/who $)
+
+
+# surfarcher, 15-May-2013, 0pt.
+/position [$=''] = call_alias(/getpos $)
+
+
+# powertool	pt	Assigns a command to the item in hand.	/<command> [command [arguments]]
+#					/<command> c:<chat message>
+#					/<command> [a/r:]<command> <arguments>
+#					/<command> [d/l]:
+# powertooltoggle	ptt, pttoggle	Enables or disables all current powertools	/<command>
+# r	reply	Quickly reply to the last player to message you.	/<command> <message>
+# realname		Allows you to see a player's real username	/<command> <player>
+# recipe	method, formula, recipes	Displays how to craft items.	/<command> <item> [recipe number]
+# rules		Displays the rules.	/<command> <page number>
+# seen		Check when a player was last online.	/<command> <player>
+# spawner	changems	Change the mob type of a spawner	/<command> <Mob>
+
+
+# surfarcher, 15-May-2013, 0pt.
+essentials.suicide:/suicide [$=''] = call_alias(/kill player() $)
+
+
+# surfarcher, 15-May-2013, 0pt.
+/whereami	[$=''] = call_alias(/getpos $)
+
+
+# surfarcher, 15-May-2013, 1pt.
+essentials.list:/who [$=''] = /list $
+
+
+# surfarcher, 15-May-2013, 0pt.
+essentials.whois:/whois = >>>
+	include('common.ms')
+	_CHEc_emsg(player(), 'Usage: /whois player')
+<<<
+
+
+# surfarcher, 15-May-2013, 4pt.
+essentials.whois:/whois $player = >>>
+	include('common.ms')
+	
+	@p=player($player)
+	if(!is_null(@p) && @p != '') {
+		@ploc=ploc(@p)
+		@pinfo=pinfo(@p)
+
+		_CHEc_smsg(player(), 'Whois: '.@p)
+		_CHEc_smsg(player(), ' Nick: '.@pinfo[4])
+		_CHEc_smsg(player(), ' Health: '.@pinfo[5].'/20')
+		_CHEc_smsg(player(), ' Exp: '.(pexp(@p)*plevel(@p)).' (Level '.plevel(@p).')')
+		_CHEc_smsg(player(), ' Location: '.'X:'.integer(@ploc[0]).' Y:'.integer(@ploc[1]).' Z:'.integer(@ploc[2]).' W:'.@ploc[3])
+		try(
+			_CHEc_smsg(player(), ' Money: '.acc_balance(@p)),
+			_CHEc_smsg(player(), ' Money: No economy running')
+			)
+		_CHEc_smsg(player(), ' IP Address: '.@pinfo[3])
+		_CHEc_smsg(player(), ' Gamemode: '.pmode(@p))
+		#_CHEc_smsg(player(), ' God mode: true')
+		_CHEc_smsg(player(), ' OP: '.@pinfo[8])
+		_CHEc_smsg(player(), ' Fly mode: '.phas_flight(@p).' ('.if(@pinfo[18], 'IS', 'not').' flying)')
+		#_CHEc_smsg(player(), ' AFK: false')
+		_CHEc_smsg(player(), ' Blocking: '.@pinfo[17])
+		#_CHEc_smsg(player(), ' Jailed: false')
+		#_CHEc_smsg(player(), ' Muted: false')
+		_CHEc_smsg(player(), ' Sleeping: '.@pinfo[16])
+		_CHEc_smsg(player(), ' Sneaking: '.@pinfo[11])
+	}
+<<<
+
+
+# EOF

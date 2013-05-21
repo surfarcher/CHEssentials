@@ -1,0 +1,15 @@
+# CHEssentials - the CommandHelper replacement for Essentials.
+#
+# Copyright (c) 2013 by the sk89q.com community
+
+# balance	bal, money	Gives the current balance of a player. 	/<command> [player name]
+# balancetop	baltop	Displays the top account balances.	/<command> [page]
+# eco	economy	Modify a players balance by the given amount.	/<command> <give|take|reset> <player name> <amount>
+# pay		Pays a specified player from your balance.	/<command> <player> <amount>
+# sell		Sells an item with amount specified. 	/<command> <itemname|id> [amount]
+#					/<command> <hand|invent|blocks>
+# setworth		Sets the worth of an item.	/<command> [itemname|id] <price>
+# worth	price	Displays how much an item is worth	/<command> [item [amount]]
+
+
+# EOF

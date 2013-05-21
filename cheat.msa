@@ -1,0 +1,125 @@
+# CHEssentials - the CommandHelper replacement for Essentials.
+#
+# Copyright (c) 2013 by the sk89q.com community
+
+
+# bigtree		Spawns a big tree.	/<command> <tree|redwood|jungle>
+
+
+# surfarcher, 15-May-2013, 1pt.
+essentials.break:/break [$=''] = break_block(pcursor())
+
+
+# surfarcher, 15-May-2013, 1pt.
+/dawn [$=''] = /time set dawn
+
+
+# surfarcher, 15-May-2013, 1pt.
+/day [$=''] = /time set day
+
+
+# enchant	enchantment	Enchants the item the user is holding.	/<command> [enchantment name] [level]]
+
+
+# surfarcher, 18-May-2013, 0pt.
+essentials.exp:/exp [$parm1=''] [$player=''] [$amount=''] [$=''] = >>>
+	include('cheat.ms')
+	
+	_CHEch_exp($parm1, $player, $amount)
+<<<
+
+
+# surfarcher, 16-May-2013, 0pt.
+/eat [$=''] = call_alias(/feed)
+
+
+# raGan, 3-Apr-2013, 3pt.
+# surfarcher, 17-May-2013,0pt. Formatting and standard messaging.
+essentials.feed:/feed = >>>
+	include('common.ms')
+	
+	set_phunger(20)
+	_CHEc_smsg(player(), 'Fed!')
+<<<
+essentials.feed.others:/feed $p = >>>
+	include('common.ms')
+	
+	if(ponline($p)) {
+		set_phunger($p, 20)
+		_CHEc_smsg(player(), 'You just fed '.$p.'!')
+		_CHEc_dmsg($p, player().' just fed you!')
+	} else {
+		_CHEc_emsg(player(), $p.' is not online')
+	}
+<<<
+
+
+# firework		Allows you to modify a stack of fireworks	/<command> <meta param>
+#					/<command> <power|fire> [amount]
+#					/<command> clear
+
+
+# PseudoKnight, 5-Apr-2013, 5pt. Permission mods by surfarcher.
+# surfarcher, 17-May-2013, 0pt. Standard messaging and some reformatting/die() removal.
+essentials.fly:/fly [$player] [$bool] = >>>
+	include('common.ms')
+	
+	if($player) {
+		try(@player = player($player), _CHEc_emsg(player(), 'Unknown player.') die())
+		if(@player != player() && !has_permission('essentials.fly.others')) { 
+			_CHEc_emsg(player(), 'You do not have permission.')
+		} else {
+			if($bool, @bool = $bool, @bool = !phas_flight(@player))
+			switch(@bool,
+				array('on', 'true'),
+				  set_pflight(@player, 1)
+				  _CHEc_smsg(player(), 'Turned on fly mode for '.@player.'.')
+				  _CHEc_dmsg(@player, player().' turned on your fly mode.'),
+				array('off', 'false'),
+				  set_pflight(@player, 0)
+				  _CHEc_smsg(player(), 'Turned off fly mode for '.@player.'.')
+				  _CHEc_dmsg(@player, player().' turned off your fly mode.'), 
+			  _CHEc_emsg(player(), 'Usage: /fly [player] [on|off]')
+			)
+		}
+	} else {
+		if(phas_flight()) {
+			set_pflight(0)
+			_CHEc_smsg(player(), 'Turned off fly mode.')
+		} else {
+			set_pflight(1)
+			_CHEc_smsg(player(), 'Turned on fly mode.')
+		}
+	}
+<<< 
+
+
+# gamemode	gm, creative, survival, adventure, gmc, gma, gms, gmt	Change player gamemode.	/<command> [c|s|a|t|creative|survival|adventure|toggle] [player]
+# give		Give another player an item	/<command> <player> <item|item:damage value> [amount [enchant:level...]]
+# god	godmode, tgm	Toggles god mode.	/<command> [player [on|off]]
+# hat		Get some cool new headgear	/<command> [remove]
+# heal		Heal a player.	/<command> [player]
+# item	i	Gives yourself a specified item.	/<command> <item|item:damage value> [amount [enchant:level...]]
+# kit	kits	Spawn a predefined kit.	/<command> [kit name] [player name]
+# more		Fills the item stack in hand to maximum size.	/<command>
+
+
+# surfarcher, 15-May-2013, 1pt.
+/night [$=''] = /time set night
+
+
+# ptime	playertime	Change a players time.	/<command> [list|reset|day|night|dawn|17:30|4pm|4000ticks] <player|*>
+# repair	fix	Repairs the durability of all or one item.	/<command> [hand|all]
+# speed	flyspeed, walkspeed, fspeed, wspeed	Change your speed limits.	/<command> <speed> [player]
+
+
+# surfarcher, 15-May-2013, 1pt.
+essentials.time:/time [$newtime=''] = /time set $newtime
+
+
+# tree		Spawns a tree.	/<command> <tree|birch|redwood|redmushroom|brownmushroom|jungle|junglebush|swamp>
+# unlimited	ul, unl	Allows the unlimited placing of items.	/<command> <list|item|clear> [player]
+# workbench	wb, wbench	Opens up a workbench	/<command>
+
+
+# EOF

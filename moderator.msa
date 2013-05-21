@@ -1,0 +1,359 @@
+# CHEssentials - the CommandHelper replacement for Essentials.
+#
+# Copyright (c) 2013 by the sk89q.com community
+
+
+# antioch	grenade, tnt	Holy hand grenade.	/<command>
+# backup		Runs the backup command	/<command>
+# ban		Bans a specified player.	/<command> <player name> <reason>
+# banip		Bans a players IP.	/<command> <player name|IP address>
+
+
+# surfarcher, 15-May-2013, 0pt.
+/bc [$=''] = call_alias(/broadcast $)
+
+
+# surfarcher, 15-May-2013, 0pt.
+/bcast [$=''] = call_alias(/broadcast $)
+
+
+# surfarcher, 15-May-2013, 2pt.
+essentials.broadcast:/broadcast [$msg=''] [$=''] = >>>
+	include('common.ms')
+	
+	if($msg == '') {
+		_CHEc_emsg(player(), 'Usage: /broadcast message_text')
+	} else {
+		foreach(all_players(), @p) {
+			tmsg(@p, color('RED').'[broadcast] '.color('GREEN').$msg.' '.$)
+		}
+	}
+<<<
+
+
+# surfarcher, 16-May-2013, 2pt.
+essentials.burn:/burn = >>>
+	include('common.ms')
+	_CHEc_emsg(player(), 'Usage: /burn player [seconds]')
+<<<
+essentials.burn:/burn $player [$sec=''] = >>>
+	include('common.ms')
+	
+	@s=if($sec == '', 9999, $sec)
+
+	if(!is_numeric(@s)) {
+		_CHEc_emsg(player(), 'Time to burn must be a number!')
+	} else {
+		set_ponfire(player($player), @s * 20)
+	}
+<<<
+
+
+# surfarcher, 15-May-2013, 0pt.
+/butcher [$=''] = call_alias(/killall $)
+
+
+# surfarcher, 15-May-2013, 0pt.
+/ci [$=''] = call_alias(/clearinventory $)
+
+
+# surfarcher, 15-May-2013, 0pt.
+/clean [$=''] = call_alias(/clearinventory $)
+
+
+# surfarcher, 15-May-2013, 0pt.
+/clearinvent [$=''] = call_alias(/clearinventory $)
+
+
+# surfarcher, 15-May-2013, 2pt.
+essentials.clearinventory:/clearinventory [$player=''] [$=''] = >>>
+	/clear if($player == '', player(), $player) $
+<<<
+
+
+# deljail		Deletes a jail.	/<command> <jail name>
+
+
+# surfarcher, 16-May-2013, 0pt.
+/echo [$=''] = call_alias(/ping $)
+
+
+# surfarcher, 16-May-2013, 0pt.
+/ext [$=''] = call_alias(/extinguish $)
+
+
+# surfarcher, 16-May-2013, 1pt.
+essentials.ext:/extinguish = >>>
+	include('common.ms')
+	_CHEc_emsg(player(), 'Usage: /extinguish player')
+<<<
+essentials.ext:/extinguish $player = set_ponfire(player($player), 0)
+
+
+# enderchest	endersee, echest	Lets you see inside an enderchest.	/<command> [player]
+# essentials	ess	Returns Essentials Version, and reload config.	/<command> [reload|debug]
+# 					/<command> [reset] [player]
+# ext	extinguish	Extinguish a player.	/<command> <player name>
+
+
+# surfarcher, 15-May-2013, 3pt.
+essentials.fireball:/fireball [$size=''] = >>>
+	include('common.ms')
+	
+	@s=trim(to_lower($size))
+	if(@s == '' || @s == 'large') {
+		shoot_projectile(player(), 'FIREBALL')
+	} else if (@s == 'small') {
+		shoot_projectile(player(), 'SMALL_FIREBALL')
+	} else {
+		_CHEc_emsg(player(), 'Usage: /fireball [small|large]')
+	}
+<<<
+
+
+# gc	lag, mem, memory	Displays server usage information.	/<command>
+# invsee		See the inventory of other players. 	/<command> [player name]
+# jails		List all jails.	/<command>
+
+
+# surfarcher, 16-May-2013, 3pt.
+essentials.kick:/kick=>>>
+	include('common.ms')
+	_CHEc_emsg(player(), 'Usage: /kick player [reason]')
+<<<
+essentials.kick:/kick $player [$='']=>>>
+	include('common.ms')
+	@p=player($player)
+	kick(@p, $)
+	_CHEc_smsg(player(), 'Kicked '.@p)
+<<<
+
+
+# surfarcher, 16-May-2013, 3pt.
+essentials.kickall:/kickall [$=''] = >>>
+	include('common.ms')
+	
+	@i=0
+	foreach(all_players(), @p) {
+		if(@p != player()) {
+			kick(@p, $)
+			@i++
+		}
+	}
+	_CHEc_smsg(player(), 'Kicked '.@i.' players.')
+<<<
+
+
+# surfarcher, 15-May-2013, 3pt.
+essentials.kill:/kill [$player=''] [$=''] = >>>
+	include('common.ms')
+	
+	if($player == '') {
+		_CHEc_emsg(player(), 'Usage: /kill <player_name>')
+	} else {
+		kill(player($player))
+		_CHEc_smsg(player(), 'You killed '.player($player))
+	}
+<<<
+
+
+# surfarcher, 16-May-2013, 6pt.
+essentials.killall:/killall [$mobType=''] [$radius=''] [$=''] = >>>
+	include('common.ms')
+	
+	# Build the array of entities to iterate.
+	@el=null
+	if($mobType == '?') {
+		_CHEc_emsg(player(), 'Usage: /killall [mob type] [radius]')
+	} else if($radius != '' && !is_numeric($radius)) {
+		_CHEc_emsg(player(), 'Radius must be a number if it is supplied!')
+	} else if (to_lower(trim($mobType)) == 'player') {
+		_CHEc_emsg(player(), 'You can\'t kill players with /killall!')
+	} else {
+		if(is_numeric($radius)) {
+			if($mobType == '') {
+				@el=entities_in_radius(ploc(), $radius)
+			} else {
+				@el=entities_in_radius(ploc(), $radius, $mobType)
+			}
+		} else {
+			@el=all_entities(pworld())
+		}
+	}
+	
+	# Build the list of mobs to kill.
+	if($mobType != '') {
+		@mt=array(to_upper(trim($mobType)))
+	} else {
+		@mt=array('WITHER', 'WITCH', 'CREEPER', 'SKELETON', 'SPIDER', 'GIANT', 'ZOMBIE', 'SLIME', 
+							'GHAST', 'PIG_ZOMBIE', 'ENDERMAN', 'CAVE_SPIDER', 'BLAZE', 'ENDER_DRAGON')
+	}
+	
+	# Kill everything in @el of a type that's in @mt.
+	if(!is_null(@el)) {
+		@i=0
+		foreach(@el, @e) {
+			if(array_contains_ic(@mt, entity_type(@e))) {
+				entity_remove(@e)
+				@i++
+			}
+		}
+		_CHEc_smsg(player(), 'Killed '.@i.' '.if($mobType == '', 'mob', $mobType).'s.')
+	}
+<<<
+
+
+# surfarcher, 15-May-2013, 0pt.
+/lightning $ = call_alias(/thor $)
+
+
+# mute		Mutes or un-mutes a specified player.	/<command> <player name> [time]
+# nuke		Think carpet bomb.	/<command> [Player]
+
+
+# surfarcher, 16-May-2013, 1pt.
+essentials.ping:/ping [$=''] = >>>
+	include('common.ms')
+	_CHEc_emsg(player(), if($ == '', 'Pong!', $))
+<<<
+
+
+# surfarcher, 15-May-2013, 0pt.
+/pong [$=''] = call_alias('/ping Ping!')
+
+
+# surfarcher, 15-May-2013, 0pt.
+/rain [$duration=''] [$=''] = call_alias(/weather 'storm' $duration)
+
+
+# surfarcher, 16-May-2013, 3pt.
+essentials.remove:/remove [$type=''] [$radius=''] [$=''] = >>>
+	include('common.ms')
+	
+	@t=trim(to_lower($type))
+	if(@t == 'drops' || @t == 'drop') {
+		call_alias('/killall DROPPED_ITEM '.$radius)
+	} else if (@t == 'arrows' || @t == 'arrow') {
+		call_alias('/killall ARROW '.$radius)
+	} else if (@t == 'boats' || @t == 'boat') {
+		call_alias('/killall BOAT '.$radius)
+	} else if (@t == 'minecarts' || @t == 'minecart') {
+		call_alias('/killall MINECART '.$radius)
+	} else if (@t == 'xps' || @t == 'xp') {
+		call_alias('/killall EXPERIENCE_ORB '.$radius)
+	} else if (@t == 'paintings' || @t == 'painting') {
+		call_alias('/killall PAINTING '.$radius)
+	} else {
+		_CHEc_emsg(player(), 'Usage: /remove <drops|arrows|boats|minecarts|xp|paintings> [radius]')
+	}
+<<<
+
+
+# setjail		Create a new jail location.	/<command> <jail name>
+
+
+# surfarcher, 15-May-2013, 0pt.
+/shock $ = call_alias(/thor $)
+
+
+# surfarcher, 15-May-2013, 0pt.
+/sky [$duration=''] [$=''] = call_alias(/weather 'sun' $duration)
+
+
+# surfarcher, 15-May-2013, 0pt.
+/smite $ = call_alias(/thor $)
+
+
+# socialspy		See other players private messages	/<command>
+
+
+# surfarcher, 15-May-2013, 1pt.
+essentials.spawnmob:/spawnmob = >>>
+	include('common.ms')
+	_CHEc_emsg(player(), 'Spawns quantity of the mob. At the player\'s location, if specified, otherwise where you are looking.')
+	_CHEc_emsg(player(), 'Usage: /spawnmob mob_type [quantity] [player]')
+<<<
+
+
+# surfarcher, 15-May-2013, 1pt.
+# Inspired by code from LadyCailin, 30-Jul-2011, 3pt.
+essentials.spawnmob:/spawnmob $mob [$qty=1] [$player=''] = >>>
+	include('common.ms')
+	
+	if($player == '') {
+		@loc=pcursor()
+	} else {
+		@loc=ploc(player($player))
+	}
+	
+	spawn_mob($mob, $qty, @loc)
+	_CHEc_smsg(player(), 'Spawned '.$qty.' '.$mob.'(s).')
+<<<
+
+
+# surfarcher, 15-May-2013, 0pt.
+/strike $ = call_alias(/thor $)
+
+
+# surfarcher, 15-May-2013, 0pt.
+/storm [$duration=''] [$=''] = call_alias(/weather 'storm' $duration)
+
+
+# sudo		Make another user perform a command.	/<command> <player> <command [args]>
+# 					/<command> <player> c:<text>
+
+
+# surfarcher, 15-May-2013, 0pt.
+/sun [$duration=''] [$=''] = call_alias(/weather 'sun' $duration)
+
+
+# tempban		Temporary bans a specified player.	/<command> <player name> <time>
+
+
+# LadyCailin, 30-Jul-2011, 3pt.
+# surfarcher, 15-May-2013, 1pt. Mods to be more like the Essentials version, standard messaging.
+essentials.lightning:/thor = call_alias(/thor player())
+essentials.lightning.others:/thor $player [$=''] = >>>
+	include('common.ms')
+	
+	@p=player($player)
+	lightning(ploc(@p))
+	set_phealth(@p, pinfo(@p)[5] - 5)
+	_CHEc_smsg(player(), 'Thou hast smote the evil player '.@p.' with thy mighty hand')
+	_CHEc_emsg(@p, if($ == '', 'You have been smote by Thor\'s Hammer!', $))
+#	/mod-broadcast pinfo($player, 0) has been smote.
+<<<
+
+
+# thunder		Toggle/trigger thunder.	/<command> <true|false> [duration]
+# togglejail	tjail, unjail, jail	Sends/Removes a player to a jail.	/<command> <player> <jail name> [time]
+# 					/<command> <player> [time]
+# unban	pardon	Unbans a player.	/<command> <player name>
+# unbanip	pardonip	Unbans a players IP address.	/<command> <player name|IP address>
+# vanish	v	Hide yourself from other players.	/<command> [on|off]
+
+
+# surfarcher, 15-May-2013, 4pt.
+essentials.weather:/weather [$mode=''] [$duration=''] [$=''] = >>>
+	include('common.ms')
+	
+	@b=null
+	if($mode == 'sun' || ($mode == '' && has_storm())) {
+		@b=False
+	} else if($mode == 'storm' || ($mode == '' && !has_storm())) {
+		@b=True
+	} else {
+		_CHEc_emsg(player(), 'Usage: /weather <sun|storm> [seconds]')
+	}
+	
+	if(!is_null(@b)) {
+		if(is_integral($duration)) {
+			storm(@b, pworld(), $duration * 20)
+		} else {
+			storm(@b)
+		}
+	}
+<<<
+
+
+# EOF
