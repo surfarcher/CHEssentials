@@ -62,35 +62,8 @@ essentials.feed.others:/feed $p = >>>
 # PseudoKnight, 5-Apr-2013, 5pt. Permission mods by surfarcher.
 # surfarcher, 17-May-2013, 0pt. Standard messaging and some reformatting/die() removal.
 essentials.fly:/fly [$player] [$bool] = >>>
-	include('common.ms')
-	
-	if($player) {
-		try(@player = player($player), _CHEc_emsg(player(), 'Unknown player.') die())
-		if(@player != player() && !has_permission('essentials.fly.others')) { 
-			_CHEc_emsg(player(), 'You do not have permission.')
-		} else {
-			if($bool, @bool = $bool, @bool = !phas_flight(@player))
-			switch(@bool,
-				array('on', 'true'),
-				  set_pflight(@player, 1)
-				  _CHEc_smsg(player(), 'Turned on fly mode for '.@player.'.')
-				  _CHEc_dmsg(@player, player().' turned on your fly mode.'),
-				array('off', 'false'),
-				  set_pflight(@player, 0)
-				  _CHEc_smsg(player(), 'Turned off fly mode for '.@player.'.')
-				  _CHEc_dmsg(@player, player().' turned off your fly mode.'), 
-			  _CHEc_emsg(player(), 'Usage: /fly [player] [on|off]')
-			)
-		}
-	} else {
-		if(phas_flight()) {
-			set_pflight(0)
-			_CHEc_smsg(player(), 'Turned off fly mode.')
-		} else {
-			set_pflight(1)
-			_CHEc_smsg(player(), 'Turned on fly mode.')
-		}
-	}
+	include('cheat.ms')
+	_CHEch_fly($player, $bool)
 <<< 
 
 

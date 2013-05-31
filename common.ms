@@ -39,4 +39,19 @@ proc(_CHEc_emsg, @player, @msg,
 )
 
 
+proc(_CHEc_player, @player,
+	@ret=null
+	
+	try(@ret=player(@player))
+	if(is_null(@ret)) {
+		if(array_contains_ic(get_offline_players(), @player)) {
+			@ret=@player
+		}
+	}
+	
+	return(@ret)
+)
+
+
+
 #EOF

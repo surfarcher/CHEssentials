@@ -70,4 +70,35 @@ proc(_CHEch_exp, @parm1, @player, @amount,
 )
 
 
+proc(_CHEch_fly, @player, @bool,	
+	if(@player) {
+		try(@p = player(@player), _CHEc_emsg(player(), 'Unknown player.') die())
+		if(@p != player() && !has_permission('essentials.fly.others')) { 
+			_CHEc_emsg(player(), 'You do not have permission.')
+		} else {
+			if(@bool, @b = @bool, @b = !phas_flight(@p))
+			switch(@b,
+				array('on', 'true'),
+				  set_pflight(@p, 1)
+				  _CHEc_smsg(player(), 'Turned on fly mode for '.@p.'.')
+				  _CHEc_dmsg(@p, player().' turned on your fly mode.'),
+				array('off', 'false'),
+				  set_pflight(@p, 0)
+				  _CHEc_smsg(player(), 'Turned off fly mode for '.@p.'.')
+				  _CHEc_dmsg(@p, player().' turned off your fly mode.'), 
+			  _CHEc_emsg(player(), 'Usage: /fly [player] [on|off]')
+			)
+		}
+	} else {
+		if(phas_flight()) {
+			set_pflight(0)
+			_CHEc_smsg(player(), 'Turned off fly mode.')
+		} else {
+			set_pflight(1)
+			_CHEc_smsg(player(), 'Turned on fly mode.')
+		}
+	}
+)
+
+
 # EOF
