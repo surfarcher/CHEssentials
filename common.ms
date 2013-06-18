@@ -52,6 +52,20 @@ proc(_CHEc_player, @player,
 	return(@ret)
 )
 
+proc(_CHEc_perm, @player, @permission, @message = null,
+	@perm = 'essentials.' . @permission
+	if(has_permission(@player, @permission)) {
+		return(true)
+	} else {
+		if(is_null(@message)) {
+			tmsg(@player, color('red'). 'You do not have access to that command.')
+		} else {
+			tmsg(@player, @message)
+		}
+		return(false)
+	}
+)
+
 
 
 #EOF
